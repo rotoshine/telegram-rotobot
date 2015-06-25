@@ -11,8 +11,9 @@ function process(){
 		if(err){
 			console.log(err);
 		}
-		
-		console.log('unprocessedLogs count :' + unprocessedLogs.length);	
+		if(unprocessedLogs.length > 0){		
+			console.log('unprocessedLogs count :' + unprocessedLogs.length);	
+		}
 	
 		var works = [];
 		for(var i = 0; i < unprocessedLogs.length; i++){
