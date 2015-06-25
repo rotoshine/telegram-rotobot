@@ -28,7 +28,7 @@ exports.getUpdates = function(callback){
 
 			if(result.ok && messages.length > 0){
 				currentOffset = messages[messages.length - 1].update_id;
-				
+
 				var works = [];
 
 				for(var i = 0; i < messages.length; i++){
@@ -39,6 +39,7 @@ exports.getUpdates = function(callback){
 								.exec(function(err, logs){
 									if(err){
 										console.log(err);
+										return next(err);
 									}else if(logs && logs.length > 0){
 										return next();
 									}else{
@@ -46,7 +47,7 @@ exports.getUpdates = function(callback){
 											if(err){
 												console.log(err);
 											}
-											return next();
+											return next(err);
 										});
 									}
 								});
@@ -55,6 +56,7 @@ exports.getUpdates = function(callback){
 				}
 
 				if(works.length > 0){
+					console.log('new command log count : ' + works.length);
 					async.parallel(works, callback);
 				}else{
 					callback();
