@@ -21,6 +21,8 @@ exports.getUpdates = function(callback){
 	}else{
 		apiUrl = apiUrl +'?limit=10';
 	}
+
+	console.log(apiUrl);
 	request(apiUrl, function(err, res, result){
 		if(err){
 			console.log(err);
