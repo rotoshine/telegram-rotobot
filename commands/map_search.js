@@ -17,7 +17,7 @@ module.exports = {
       return request(apiUrl, function(err, res, result){
         if(err){
           messageFormat.text = '검색 중 에러가 발생했습니다. 개발자를 갈구세요.';
-          return telegram.sendMessage(messageFormat)
+          return telegram.sendMessage(messageFormat);
         }else{
           if(result.length > 0){
             result = JSON.parse(result);
@@ -36,13 +36,12 @@ module.exports = {
                 messageFormat.text = "'" + commandParam + '"의 지도검색 결과가 없습니다.';
                 return telegram.sendMessage(messageFormat);
               }
-            }else{
-              messageFormat.text = '검색 결과가 이상합니다. 개발자를 갈구세요.';
-              return telegram.sendMessage(messageFormat)
             }
           }
         }
-      })
+        messageFormat.text = '검색 결과가 이상합니다. 개발자를 갈구세요.';
+        return telegram.sendMessage(messageFormat);
+      });
     }else{
       messageFormat.text = '검색어는 2글자 이상 입력해주세요.';
       return telegram.sendMessage(messageFormat);
