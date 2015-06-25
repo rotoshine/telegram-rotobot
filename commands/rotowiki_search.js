@@ -5,7 +5,7 @@ var ROTOWIKI_SEARCH_API = ROTOWIKI_URL + '/api/documents';
 
 
 module.exports = {
-	commandKeywords: ['/로토위키검색', '/rotowiki_search', '/로토위키 검색'],
+	commandKeywords: ['/로토위키검색', '/search_rotowiki', '/로토위키 검색'],
 	description: '로토위키를 검색합니다',
 	run: function(message, commandParam, callback){
 		if(commandParam !== '' && commandParam.length > 1){
@@ -17,11 +17,11 @@ module.exports = {
 						callback: calllback
 					});
 				}else if(result !== ''){
-					var documents = JSON.parse(result);					
+					var documents = JSON.parse(result);
 					if(documents.length > 0){
 						var resultMessages = [
 							'"' + commandParam + '"의 검색결과 입니다.'
-						];	
+						];
 
 						for(var i = 0; i < documents.length; i++){
 							resultMessages.push(documents[i].title + ' - ' + ROTOWIKI_URL + '/document-by-id/' + documents[i].id);
