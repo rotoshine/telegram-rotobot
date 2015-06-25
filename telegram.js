@@ -39,7 +39,7 @@ exports.getUpdates = function(callback){
 				var messages = result.result;
 
 				if(result.ok && messages.length > 0){
-					currentOffset = messages[messages.length - 1].update_id + 1;
+					currentOffset = messages[messages.length - 1].update_id;
 					fs.writeFileSync('currentOffset', currentOffset);
 
 					for(var i = 0; i < messages.length; i++){
@@ -68,7 +68,6 @@ exports.getUpdates = function(callback){
 
 					console.log(works);
 					if(works.length > 0){
-						console.log('new command log count : ' + works.length);
 						async.parallel(works, callback);
 					}else{
 						callback();
