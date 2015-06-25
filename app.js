@@ -1,9 +1,13 @@
-var mongoose = require('mongoose');
 var config = require('./config.js');
 var telegram = require('./telegram');
+var logProcessor = require('./logProcessor');
+var logCollector = require('./logCollector');
 
-var updateCycle = config.updateCycle || 500;
+logCollector.start();
+console.log('log collect start.');
 
-setInterval(function(){
-	telegram.getUpdates();
-}, updateCycle)
+logProcessor.process();	
+console.log('log processing start.');
+
+console.log('telegram-rotobot on.');
+

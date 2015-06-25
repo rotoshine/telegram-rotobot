@@ -21,7 +21,11 @@ module.exports = function(mongoose){
         type: Date,
         default: Date.now
       }
-  	}
+  	},
+    isProcessed: {
+      type: Boolean,
+      default: false
+    }
   });
 
   return mongoose.model('Log', LogSchema);
