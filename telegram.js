@@ -39,9 +39,9 @@ exports.getUpdates = function(callback){
 				var messages = result.result;
 
 				if(result.ok && messages.length > 0){
-					currentOffset = messages[messages.length - 1].update_id;
+					currentOffset = messages[messages.length - 1].update_id + 1;
 					fs.writeFileSync('currentOffset', currentOffset);
-					
+
 					for(var i = 0; i < messages.length; i++){
 						(function(message){
 							works.push(function(next){
