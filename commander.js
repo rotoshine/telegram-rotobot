@@ -14,6 +14,24 @@ _.each(commandPaths, function(commandPath){
 	console.log(commandPath + ' command loaded.');
 });
 
+// 도움말 커맨드는 다른 커맨드를 순회하므로 여기에 작성한다.
+comments.push({
+	commandKeywords: ['/help', '/도움', '/스피드웨건'],
+	description: '...설명이 필요한가?',
+	run: function(message, keywordParam, callback){
+		var commandHelps = [];
+		for(var i = 0; i < commands.length; i++){
+			commandHelps.push(commands[i].commandKeywords.join(', ') + ' - ' + commands[i].description);
+		}
+
+		return telegram.sendMessage({
+			chat_id: message.chat.id,
+			text: commandHelps.join('\r\n'),
+			callback: callback
+		});
+	}
+});
+
 function getCommandParam(text, commandKeyword){
 	return _s.trim(text.replace(commandKeyword, ''));	
 }
