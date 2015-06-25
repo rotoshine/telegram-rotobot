@@ -1,0 +1,15 @@
+{
+  "name": "rotobot",
+  "version": "1.0.0",
+  "description": "로토봇이다 임마",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rotoshine@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^1.2.1",
+    "request": "^2.58.0"
+  }
+}
