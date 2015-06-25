@@ -21,7 +21,7 @@ exports.getUpdates = function(callback){
 	}else{
 		apiUrl = apiUrl +'?limit=10';
 	}
-	request(API_URL + '/' + API_MAPPER.GET_UPDATES, function(err, res, result){
+	request(apiUrl, function(err, res, result){
 		if(err){
 			console.log(err);
 			callback(err);
@@ -50,7 +50,7 @@ exports.getUpdates = function(callback){
 												if(err){
 													console.log(err);
 												}
-												return next(err);
+												return next();
 											});
 										}
 									});
