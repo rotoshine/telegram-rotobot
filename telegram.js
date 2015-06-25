@@ -17,7 +17,7 @@ exports.currentOffset = currentOffset;
 exports.getUpdates = function(callback){
 	var apiUrl = API_URL + '/' + API_MAPPER.GET_UPDATES;
 	if(currentOffset != null){
-		apiUrl = apiUrl + '?offset' + currentOffset + '&limit=10';
+		apiUrl = apiUrl + '?offset=' + currentOffset + '&limit=10';
 	}else{
 		apiUrl = apiUrl +'?limit=10';
 	}
