@@ -26,14 +26,13 @@ exports.getUpdates = function(callback){
 			console.log(err);
 			callback(err);
 		}else{
+			var works = [];
 			try{
 				result = JSON.parse(result);
 				var messages = result.result;
 
 				if(result.ok && messages.length > 0){
 					currentOffset = messages[messages.length - 1].update_id;
-
-					var works = [];
 
 					for(var i = 0; i < messages.length; i++){
 						(function(message){
@@ -59,6 +58,7 @@ exports.getUpdates = function(callback){
 						})(messages[i]);
 					}
 
+					console.log(works);
 					if(works.length > 0){
 						console.log('new command log count : ' + works.length);
 						async.parallel(works, callback);
