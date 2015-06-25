@@ -3,6 +3,7 @@ var request = require('request');
 var async = require('async');
 var mongoose = require('./connection');
 var Log = mongoose.model('Log')
+var fs = require('fs');
 
 var API_URL = 'https://api.telegram.org/bot' + config.token;
 var API_MAPPER = {
@@ -12,6 +13,10 @@ var API_MAPPER = {
 };
 
 var currentOffset = null;
+
+if(fs.existsSync('./currentOffset')){
+	currentOffset = fs.readFileSync('./currentOffset');
+}
 exports.currentOffset = currentOffset;
 
 exports.getUpdates = function(callback){
@@ -35,7 +40,8 @@ exports.getUpdates = function(callback){
 
 				if(result.ok && messages.length > 0){
 					currentOffset = messages[messages.length - 1].update_id;
-
+					fs.writeFileSync('currentOffset', currentOffset);
+					
 					for(var i = 0; i < messages.length; i++){
 						(function(message){
 							works.push(function(next){
