@@ -6,18 +6,18 @@ var async = require('async');
 var config = require('./config');
 var processCycle = config.processCycle || 500;
 
-function process(){	
+function process(){
 	Log.find({ isProcessed : false}).exec(function(err, unprocessedLogs){
 		if(err){
 			console.log(err);
 		}
-		if(unprocessedLogs.length > 0){		
-			console.log('unprocessedLogs count :' + unprocessedLogs.length);	
+		if(unprocessedLogs.length > 0){
+			console.log('unprocessedLogs count :' + unprocessedLogs.length);
 		}
-	
+
 		var works = [];
 		for(var i = 0; i < unprocessedLogs.length; i++){
-			(function(unprocessedLog){				
+			(function(unprocessedLog){
 				works.push(function(next){
 					commander.parse(unprocessedLog, function(){
 						unprocessedLog.isProcessed = true;
@@ -26,10 +26,13 @@ function process(){
 							return next();
 						});
 					}, function(log){
-						console.log(log.message.text + ' parse fail.');
-						return next();
-					});				
-				});	
+						unprocessedLog.isProcessed = true;
+						unprocessedLog.save(function(){
+							console.log(log.message.text + ' parse fail.');
+							return next();
+						});
+					});
+				});
 			})(unprocessedLogs[i]);
 		}
 		if(works.length > 0){
@@ -38,7 +41,7 @@ function process(){
 			});
 		}else{
 			return setTimeout(process, processCycle);
-		}		
+		}
 	});
 }
 
