@@ -17,50 +17,58 @@ exports.currentOffset = currentOffset;
 exports.getUpdates = function(callback){
 	var apiUrl = API_URL + '/' + API_MAPPER.GET_UPDATES;
 	if(currentOffset != null){
-		apiUrl = apiUrl + '?offset' + currentOffset;
+		apiUrl = apiUrl + '?offset' + currentOffset + '&limit=10';
+	}else{
+		apiUrl = apiUrl +'?limit=10';
 	}
 	request(API_URL + '/' + API_MAPPER.GET_UPDATES, function(err, res, result){
 		if(err){
 			console.log(err);
+			callback(err);
 		}else{
-			result = JSON.parse(result);
-			var messages = result.result;
+			try{
+				result = JSON.parse(result);
+				var messages = result.result;
 
-			if(result.ok && messages.length > 0){
-				currentOffset = messages[messages.length - 1].update_id;
+				if(result.ok && messages.length > 0){
+					currentOffset = messages[messages.length - 1].update_id;
 
-				var works = [];
+					var works = [];
 
-				for(var i = 0; i < messages.length; i++){
-					(function(message){
-						works.push(function(next){
-							Log
-								.find({update_id : message.update_id})
-								.exec(function(err, logs){
-									if(err){
-										console.log(err);
-										return next(err);
-									}else if(logs && logs.length > 0){
-										return next();
-									}else{
-										new Log(message).save(function(err){
-											if(err){
-												console.log(err);
-											}
+					for(var i = 0; i < messages.length; i++){
+						(function(message){
+							works.push(function(next){
+								Log
+									.find({update_id : message.update_id})
+									.exec(function(err, logs){
+										if(err){
+											console.log(err);
 											return next(err);
-										});
-									}
-								});
-						});
-					})(messages[i]);
-				}
+										}else if(logs && logs.length > 0){
+											return next();
+										}else{
+											new Log(message).save(function(err){
+												if(err){
+													console.log(err);
+												}
+												return next(err);
+											});
+										}
+									});
+							});
+						})(messages[i]);
+					}
 
-				if(works.length > 0){
-					console.log('new command log count : ' + works.length);
-					async.parallel(works, callback);
-				}else{
-					callback();
+					if(works.length > 0){
+						console.log('new command log count : ' + works.length);
+						async.parallel(works, callback);
+					}else{
+						callback();
+					}
 				}
+			}catch(e){
+				console.log(e);
+				callback(e);
 			}
 		}
 	});
