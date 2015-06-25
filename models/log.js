@@ -16,12 +16,12 @@ module.exports = function(mongoose){
   			first_name: String,
   			username: String
   		},
-  		text: String
-  	},     
-    date: {
-      type: Date,
-      default: Date.now
-    }
+  		text: String,
+      date: {
+        type: Date,
+        default: Date.now
+      }
+  	}
   });
 
   return mongoose.model('Log', LogSchema);
