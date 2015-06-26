@@ -34,7 +34,7 @@ module.exports = {
         return telegram.sendMessage({
           chat_id: message.chat.id,
           text: '날씨검색 에러가 발생했습니다. 개발자를 갈구세요.',
-          callback;
+          callback: callback
         });
       }else{
           try{
@@ -46,7 +46,7 @@ module.exports = {
 
             return telegram.sendMessage({
               chat_id: message.chat.id,
-              text: searchResultText + weatherText.join(', ');
+              text: searchResultText + weatherText.join(', '),
               callback: callback
             });
           }catch(e){
@@ -54,7 +54,7 @@ module.exports = {
             return telegram.sendMessage({
               chat_id: message.chat.id,
               text: '날씨검색 에러가 발생했습니다. 개발자를 갈구세요.',
-              callback;
+              callback: callback
             });
           }
       }
