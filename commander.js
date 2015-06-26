@@ -33,11 +33,11 @@ commands.push({
 });
 
 function getCommandParam(text, commandKeyword){
-	return _s.trim(text.replace(commandKeyword, ''));	
+	return _s.trim(text.replace(commandKeyword, ''));
 }
 
 function isCommand(text, commandKeyword){
-	var textStart = text.substring(0, commandKeyword.length);	
+	var textStart = text && text.substring(0, commandKeyword.length);	
 	return textStart === commandKeyword;
 }
 
@@ -48,15 +48,15 @@ function parse(log, parseSuccessCallback, parseFailCallback){
 	_.each(commands, function(command){
 		_.each(command.commandKeywords, function(commandKeyword){
 			if(isCommand(message.text, commandKeyword) && command.run){
-				console.log('running command:' + commandKeyword);			
-				isCommandCall = true;	
+				console.log('running command:' + commandKeyword);
+				isCommandCall = true;
 				return command.run(message, getCommandParam(message.text, commandKeyword), parseSuccessCallback);
 			}
 		});
 	});
 
 	if(!isCommandCall){
-		return parseFailCallback(log);	
-	}	
+		return parseFailCallback(log);
+	}
 };
 exports.parse = parse;
