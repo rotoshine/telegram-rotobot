@@ -14,7 +14,7 @@ module.exports = {
 					return telegram.sendMessage({
 						chat_id: message.chat.id,
 						text: '검색 중 에러가 발생했습니다. 개발자를 갈구세요.',
-						callback: calllback
+						callback: callback
 					});
 				}else if(result !== ''){
 					var documents = JSON.parse(result);
@@ -27,10 +27,8 @@ module.exports = {
 							resultMessages.push(documents[i].title + ' - ' + ROTOWIKI_URL + '/document-by-id/' + documents[i].id);
 						}
 
-						console.log(resultMessages);
-						console.log(resultMessages.join('\r\n'));
-
 						return telegram.sendMessage({
+							reply_to_message_id: message.message_id,
 							chat_id: message.chat.id,
 							text: resultMessages.join('\r\n'),
 							callback: callback

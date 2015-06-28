@@ -84,7 +84,7 @@ exports.getUpdates = function(callback){
 
 exports.sendMessage = function(params){
 	var apiUrl = API_URL + '/' + API_MAPPER.SEND_MESSAGE;
-	var querystring = 'chat_id=' + params.chat_id + '&text=' + params.text;
+	var querystring = 'chat_id=' + params.chat_id + '&text=' + params.text + '&disable_web_page_preview=false';
 	if(params.reply_to_message_id){
 		querystring = querystring + '&reply_to_message_id=' + params.reply_to_message_id;
 	}
