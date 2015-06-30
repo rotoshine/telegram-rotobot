@@ -2,7 +2,8 @@ var telegram = require('../telegram');
 
 var REPLY_COMMENT = {
 	39598673: 'Oi!!!',
-	59496128: '가슴 만지게 해주세요!'
+	59496128: '가슴 만지게 해주세요!',
+	64128282: 'ㅗ'
 };
 
 module.exports = {
