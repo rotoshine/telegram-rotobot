@@ -30,8 +30,8 @@ exports.getUpdates = function(callback){
 	console.log(apiUrl);
 	request(apiUrl, function(err, res, result){
 		if(err){
-			console.log(err);
-			callback(err);
+			console.log('request error:', err);
+			return callback(err);
 		}else{
 			var works = [];
 			try{
@@ -66,16 +66,15 @@ exports.getUpdates = function(callback){
 						})(messages[i]);
 					}
 
-					console.log(works);
 					if(works.length > 0){
-						async.parallel(works, callback);
+						return async.parallel(works, callback);
 					}else{
-						callback();
+						return callback();
 					}
 				}
 			}catch(e){
-				console.log(e);
-				callback(e);
+				console.log('error:', e);
+				return callback(e);
 			}
 		}
 	});
