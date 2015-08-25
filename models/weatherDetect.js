@@ -1,5 +1,5 @@
 module.exports = function(mongoose){
-  var WeatherDetector = new mongoose.Schema({
+  var WeatherDetect = new mongoose.Schema({
     chat_id: {
       type: Number,
       required: true,
@@ -11,5 +11,5 @@ module.exports = function(mongoose){
     detectCities: [String]
   });
 
-  return mongoose.model('WeatherDetector', WeatherDetector);
+  return mongoose.model('WeatherDetect', WeatherDetect);
 };

@@ -15,7 +15,7 @@ function setNotice(params){
 		}else{
 			telegram.sendMessage({
 				chat_id: params.chat_id,
-				text: '공지가 설정되었습니다. "' + notice.content + '"',
+				content: '공지가 설정되었습니다. "' + notice.content + '"',
 				callback: params.callback || function(){}				
 			});	
 		}
@@ -33,17 +33,17 @@ function getNotice(params){
 				console.log(err);
 				telegram.sendMessage({
 					chat_id: chat_id,
-					text: '공지를 가져오다 에러가 발생했습니다. 개발자를 갈구세요.'							
+					content: '공지를 가져오다 에러가 발생했습니다. 개발자를 갈구세요.'							
 				});
 			}else if(notices.length === 1){
 				telegram.sendMessage({
 					chat_id: chat_id,
-					text: '현재 공지는 "' + notices[0].content + '" 입니다.'							
+					content: '현재 공지는 "' + notices[0].content + '" 입니다.'							
 				});
 			}else{
 				telegram.sendMessage({
 					chat_id: chat_id,
-					text: '현재 공지가 없습니다.',							
+					content: '현재 공지가 없습니다.',							
 				});
 			}
 			return params.callback();

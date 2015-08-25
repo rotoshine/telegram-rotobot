@@ -10,35 +10,44 @@ module.exports = {
 	run: function(message, commandParam, callback){
 		if(commandParam !== '' && commandParam.length > 1){
 			request(ROTOWIKI_SEARCH_API + '?title=' + commandParam, function(err, res, result){
+				console.log(arguments);	
 				if(err){
 					return telegram.sendMessage({
 						chat_id: message.chat.id,
-						text: '검색 중 에러가 발생했습니다. 개발자를 갈구세요.',
+						reply_to_message_id: message.message_id,
+						content: '검색 중 에러가 발생했습니다. 개발자를 갈구세요.',
 						callback: callback
 					});
 				}else if(result !== ''){
-					var documents = JSON.parse(result);
-					if(documents.length > 0){
-						var resultMessages = [
-							'"' + commandParam + '"의 검색결과 입니다.'
-						];
-
-						for(var i = 0; i < documents.length; i++){
-							resultMessages.push(documents[i].title + ' - ' + ROTOWIKI_URL + '/document-by-id/' + documents[i].id);
+					try{
+						var documents = JSON.parse(result);
+										
+						if(documents.length > 0){
+							var resultMessages = [
+								'"' + commandParam + '"의 검색결과 입니다.'
+							];
+	
+							for(var i = 0; i < documents.length; i++){
+								resultMessages.push(documents[i].title + ' - ' + ROTOWIKI_URL + '/document-by-id/' + documents[i].id);
+							}
+	
+							return telegram.sendMessage({
+								reply_to_message_id: message.message_id,
+								chat_id: message.chat.id,
+								content: resultMessages.join('\r\n'),
+								callback: callback
+							});
+						}else{
+							return telegram.sendMessage({
+								chat_id: message.chat.id,
+								reply_to_message_id: message.message_id,
+								content: commandParam + '의 검색 결과가 없습니다.',
+								callback: callback
+							});
 						}
-
-						return telegram.sendMessage({
-							reply_to_message_id: message.message_id,
-							chat_id: message.chat.id,
-							text: resultMessages.join('\r\n'),
-							callback: callback
-						});
-					}else{
-						return telegram.sendMessage({
-							chat_id: message.chat.id,
-							text: commandParam + '의 검색 결과가 없습니다.',
-							callback: callback
-						});
+					}catch(e){
+						console.error(e.message);
+						return callback();
 					}
 				}
 
@@ -48,7 +57,8 @@ module.exports = {
 		}else{
 			return telegram.sendMessage({
 				chat_id: message.chat.id,
-				text: '검색어를 2글자 이상 입력하세요.',
+				reply_to_message_id: message.message_id,
+				content: '검색어를 2글자 이상 입력하세요.',
 				callback: callback
 			});
 		}

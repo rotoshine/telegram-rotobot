@@ -9,6 +9,7 @@ module.exports = {
   run: function(message, commandParam, callback){
     var messageFormat = {
       chat_id: message.chat.id,
+      reply_to_message_id: message.message_id,
       callback: callback
     };
 
@@ -16,34 +17,39 @@ module.exports = {
       var apiUrl = SEARCH_API + '?apikey=' + config.daumApiKey + '&query=' + commandParam + '&count=5';
       return request(apiUrl, function(err, res, result){
         if(err){
-          messageFormat.text = '검색 중 에러가 발생했습니다. 개발자를 갈구세요.';
+          messageFormat.content = '검색 중 에러가 발생했습니다. 개발자를 갈구세요.';
           return telegram.sendMessage(messageFormat);
         }else{
           if(result.length > 0){
-            result = JSON.parse(result);
-
-            if(result && result.channel && result.channel.item && result.channel){
-              var items = result.channel.item;
-              if(items && items.length > 0){
-                var searchResults = ['"' + commandParam + '"의 다음지도 검색 결과'];
-                for(var i = 0; i < items.length; i++){
-                  searchResults.push(items[i].title + ' --> ' + items[i].placeUrl);
+            try{
+              result = JSON.parse(result);
+  
+              if(result && result.channel && result.channel.item && result.channel){
+                var items = result.channel.item;
+                if(items && items.length > 0){
+                  var searchResults = ['"' + commandParam + '"의 다음지도 검색 결과'];
+                  for(var i = 0; i < items.length; i++){
+                    searchResults.push(items[i].title + ' --> ' + items[i].placeUrl);
+                  }
+  
+                  messageFormat.content = searchResults.join('\r\n');
+                  return telegram.sendMessage(messageFormat);
+                }else if(items.length === 0) {
+                  messageFormat.content = "'" + commandParam + '"의 지도검색 결과가 없습니다.';
+                  return telegram.sendMessage(messageFormat);
                 }
-
-                messageFormat.text = searchResults.join('\r\n');
-                return telegram.sendMessage(messageFormat);
-              }else if(items.length === 0) {
-                messageFormat.text = "'" + commandParam + '"의 지도검색 결과가 없습니다.';
-                return telegram.sendMessage(messageFormat);
               }
+            }catch(e){
+              console.error(e.message);
+              return callback();
             }
           }
         }
-        messageFormat.text = '검색 결과가 이상합니다. 개발자를 갈구세요.';
+        messageFormat.content = '검색 결과가 이상합니다. 개발자를 갈구세요.';
         return telegram.sendMessage(messageFormat);
       });
     }else{
-      messageFormat.text = '검색어는 2글자 이상 입력해주세요.';
+      messageFormat.content = '검색어는 2글자 이상 입력해주세요.';
       return telegram.sendMessage(messageFormat);
     }
   }

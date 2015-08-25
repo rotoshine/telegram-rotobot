@@ -4,9 +4,13 @@ var telegram = require('./telegram');
 
 var currentOffset = null;
 function start(){		
-	telegram.getUpdates(function(message_id){		
-		setTimeout(start, collectCycle);
-	});
+	setInterval(function(){
+		try{
+			telegram.getUpdates();
+		}catch(e){
+			console.log(e);
+		}
+	}, collectCycle);
 }
 
 exports.start = start;

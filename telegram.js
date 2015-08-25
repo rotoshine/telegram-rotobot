@@ -9,7 +9,13 @@ var API_URL = 'https://api.telegram.org/bot' + config.token;
 var API_MAPPER = {
 	'GET_UPDATES': 'getUpdates',
 	'SEND_MESSAGE': 'sendMessage',
-	'SEND_PHOTO': 'sendPhoto'
+	'SEND_PHOTO': 'sendPhoto',
+};
+
+var API_SEND_TYPE_MAPPER = {
+	'message': 'sendMessage',
+	'sticker': 'sendSticker',
+	'photo': 'sendPhoto'
 };
 
 var currentOffset = null;
@@ -81,17 +87,38 @@ exports.getUpdates = function(callback){
 };
 
 
-exports.sendMessage = function(params){
-	var apiUrl = API_URL + '/' + API_MAPPER.SEND_MESSAGE;
-	var querystring = 'chat_id=' + params.chat_id + '&text=' + params.text + '&disable_web_page_preview=false';
-	if(params.reply_to_message_id){
-		querystring = querystring + '&reply_to_message_id=' + params.reply_to_message_id;
+var send = function(sendType, params){
+	if(!API_SEND_TYPE_MAPPER.hasOwnProperty(sendType)){
+		throw new Error(sendType + "은 올바른 전송 타입이 아닙니다.");
 	}
-
-	apiUrl = apiUrl + '?' + querystring;
+	var apiUrl = API_URL + '/' + API_SEND_TYPE_MAPPER[sendType];
+	
 	console.log('request url:' + apiUrl);
-
-	request(apiUrl, function(err, res, result){
+	
+	var formData = {
+		chat_id: params.chat_id,
+		reply_to_message_id: params.reply_to_message_id
+	};
+	
+	if(sendType === 'message'){
+		formData.text = params.content;	
+	}
+	
+	if(sendType !== 'message' && params.content !== undefined){
+		formData[sendType] = [
+			fs.createReadStream(__dirname + '/' + params.content)
+		];
+	}
+	
+	console.log(formData);
+	
+	return request.post({ 
+			url: apiUrl, 
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			},
+			formData: formData 
+		}, function(err, res, result){
 		if(err){
 			console.log(err);
 		}
@@ -102,4 +129,9 @@ exports.sendMessage = function(params){
 			params.callback(result);
 		}
 	});
+};
+exports.send = send;
+
+exports.sendMessage = function(params){
+	return send('message', params);
 };
