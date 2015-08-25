@@ -2,10 +2,6 @@ var telegram = require('../telegram');
 
 // TODO DB로 이관하자.
 var REPLY_COMMENT = {
-	52543721: {
-		messageType: 'message',
-		content: 'hello world!'
-	},
 	39598673: {
 		messageType: 'sticker',
 		content: 'stickers/oi.webp'

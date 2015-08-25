@@ -96,9 +96,12 @@ var send = function(sendType, params){
 	console.log('request url:' + apiUrl);
 	
 	var formData = {
-		chat_id: params.chat_id,
-		reply_to_message_id: params.reply_to_message_id
+		chat_id: params.chat_id
 	};
+	
+	if(params.hasOwnProperty('reply_to_message_id')){
+		formData.reply_to_message_id = params.reply_to_message_id;
+	}
 	
 	if(sendType === 'message'){
 		formData.text = params.content;	
