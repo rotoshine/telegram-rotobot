@@ -80,7 +80,6 @@ var command = {
 function sendAssembleInfo(message, assemble, callback){
   return telegram.sendMessage({
     chat_id: message.chat.id,
-    reply_to_message_id: message.message_id,
     content: '어셈블 멤버 : ' + assemble.assembleUsers.join(', '),
     callback: callback
   });
