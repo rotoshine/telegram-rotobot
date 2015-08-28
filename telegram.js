@@ -26,6 +26,9 @@ if(fs.existsSync('./currentOffset')){
 exports.currentOffset = currentOffset;
 
 exports.getUpdates = function(callback){
+	if(callback === undefined){
+		callback = function(){}
+	}
 	var apiUrl = API_URL + '/' + API_MAPPER.GET_UPDATES;
 	if(currentOffset != null){
 		apiUrl = apiUrl + '?offset=' + currentOffset + '&limit=10';
@@ -33,7 +36,6 @@ exports.getUpdates = function(callback){
 		apiUrl = apiUrl +'?limit=10';
 	}
 
-	console.log(apiUrl);
 	request(apiUrl, function(err, res, result){
 		if(err){
 			console.log('request error:', err);

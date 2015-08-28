@@ -17,6 +17,7 @@ module.exports = {
       var apiUrl = SEARCH_API + '?apikey=' + config.daumApiKey + '&query=' + commandParam + '&count=5';
       return request(apiUrl, function(err, res, result){
         if(err){
+          console.error(err);
           messageFormat.content = '검색 중 에러가 발생했습니다. 개발자를 갈구세요.';
           return telegram.sendMessage(messageFormat);
         }else{
